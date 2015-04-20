@@ -4,16 +4,16 @@ function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Vuosi');
     data.addColumn({type: 'number', role: 'tooltip'});
-    data.addColumn('number', 'Vasemmistoliitto (SKDL, yms.)');
-    data.addColumn('number', 'SDP');
+    data.addColumn('number', 'Vasemmistoliitto (SKDL, STPV, SSTP)');
+    data.addColumn('number', 'SDP, STP');
     data.addColumn('number', 'Vihreät');
     data.addColumn('number', 'Muut');
     data.addColumn('number', 'RKP');
-    data.addColumn('number', 'Keskusta (Maalaisliitto)');
-    data.addColumn('number', 'KD');
-    data.addColumn('number', 'Perussuomalaiset (SMP, yms.)');
-    data.addColumn('number', 'Kokoomus');
-    data.addColumn('number', 'Liberaalit (yms.)');
+    data.addColumn('number', 'Keskusta (KePu, ML, SML)');
+    data.addColumn('number', 'Perussuomalaiset (SMP, SPP)');
+    data.addColumn('number', 'KD (SKL)');
+    data.addColumn('number', 'Kokoomus (SP)');
+    data.addColumn('number', 'Liberaalit (KP, Ed., NSP)');
     data.addRows(rawData);
 
     var options = {
@@ -28,8 +28,8 @@ function drawChart() {
             {areaOpacity: 1, color: '#cccccc'},
             {areaOpacity: 1, color: '#FED375'},
             {areaOpacity: 1, color: '#1A5D2F'},
-            {areaOpacity: 1, color: '#0C74B7'},
             {areaOpacity: 1, color: '#00229C'},
+            {areaOpacity: 1, color: '#0C74B7'},
             {areaOpacity: 1, color: '#003a54'},
             {areaOpacity: 1, color: '#FFFF00'}
         ],
