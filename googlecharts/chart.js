@@ -1,9 +1,10 @@
-google.load('visualization', '1', {packages: ['corechart']});
+google.load('visualization', '1', {packages: ['corechart', 'controls']});
 google.setOnLoadCallback(drawChart);
+
 function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Vuosi');
-    data.addColumn({type: 'number', role: 'tooltip'});
+    data.addColumn({type: 'string', role: 'tooltip'});
     data.addColumn('number', 'Vasemmistoliitto (SKDL, STPV, SSTP)');
     data.addColumn('number', 'SDP, STP');
     data.addColumn('number', 'Vihreät');
@@ -14,7 +15,39 @@ function drawChart() {
     data.addColumn('number', 'KD (SKL)');
     data.addColumn('number', 'Kokoomus (SP)');
     data.addColumn('number', 'Liberaalit (KP, Ed., NSP)');
-    data.addRows(rawData);
+
+    var i;
+    var l = rawData.length;
+    var thisRow;
+    var type;
+    for (i = 0; i < l; i++) {
+        thisRow = rawData[i];
+        switch (thisRow[1]) {
+            case 1: type = 'Eduskuntavaalit'; break;
+            case 2: type = 'Kunnallisvaalit'; break;
+            case 3: type = 'Eurovaalit'; break;
+        }
+        thisRow[1] = type;
+        data.addRow(thisRow);
+    }
+
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard'));
+
+    var filter = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'filter',
+        'dataTable': data,
+        'options': {
+            'filterColumnIndex': 1,
+            'ui': {
+                'allowMultiple': false,
+                'allowNone': true,
+                'sortValues': false,
+                'label': 'Suodata vaaleja'
+            }
+        }
+    });
+    filter.draw();
 
     var options = {
         title: 'Puolueiden historiallinen kannatus',
@@ -39,8 +72,14 @@ function drawChart() {
         tooltip: {isHtml: true}
     };
 
-    var chart = new google.visualization.AreaChart(document.getElementById('chart'));
-    chart.draw(data, options);
+    var chart = new google.visualization.ChartWrapper({
+        'chartType': 'AreaChart',
+        'containerId': 'chart',
+        'options': options
+    });
+
+    dashboard.bind(filter, chart);
+    dashboard.draw(data);
 }
 
 window.onresize = drawChart;
